@@ -10,8 +10,8 @@ from selenium.webdriver.support import expected_conditions as EC
 options = AppiumOptions()
 options.load_capabilities({
     "platformName": "Android",
-    "deviceName": "Mi Phone",
-    "platformVersion": "8",
+    "deviceName": "emulator-5554",
+    "platformVersion": "11",
     #"app": "C:\\My_files\\app-release.apk",
     "appPackage": "customer_app.talisman_online.ru",
     "appActivity": "com.example.customer_app.talisman_online.ru.MainActivity",
