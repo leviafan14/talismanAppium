@@ -39,17 +39,17 @@ class TestAppium(unittest.TestCase):
     def test_auth_by_phone_flow(self) -> None:
         # Объявление локаторов и тестовых данных
         xpath_phone_field = 'android.widget.EditText'
-        phoneNumber = 9530058635
+        phoneNumber = "9937758635"
         approve_text = "Введите последние 4 цифры номера, с которого поступил звонок, или код из СМС"
         button_xpath = '//android.widget.Button[@content-desc="Далее"]'
 
         # Получение текстового поля для ввода номера телефона
         el1 = self.driver.find_element(by=AppiumBy.CLASS_NAME, value=xpath_phone_field)
         # Клик по полю ввода номера телефона
-        el1.click(phoneNumber)
+        el1.click()
         time.sleep(2)
         # Вввод номера телефона
-        el1.send_keys()
+        el1.send_keys(phoneNumber)
 
         # Получение кнопки Далее
         button_send = self.driver.find_element(by=AppiumBy.XPATH, value=button_xpath)
