@@ -41,11 +41,12 @@ class TestAuth(unittest.TestCase):
 
     # Авторизация в клубе
     def auth_in_club(self, username, password) -> None:
-        # Объявление локаторов и тестовых данных
+
+        # Объявление локаторов
         username_field = self.driver.find_element(By.ID, self.id_user_name_field)
         password_field = self.driver.find_element(By.ID, self.id_password_field)
 
-        # Клик по полю ввода номера телефона
+        # Клик по полю ввода логина или почты
         username_field.click()
         username_field.send_keys(username)
         password_field.send_keys(password)
