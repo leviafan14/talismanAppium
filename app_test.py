@@ -13,14 +13,10 @@ options.load_capabilities({
     "platformName": "Android",
     "deviceName": "emulator-5554",
     "platformVersion": "11",
-    #"app": "C:\\My_files\\app-release.apk",
+    "app": "C:\\My_files\\app-release.apk",
     "appPackage": "customer_app.talisman_online.ru",
-    "appActivity": "com.example.customer_app.talisman_online.ru.MainActivity",
+    "appActivity": "customer_app.talisman_online.ru.MainActivity",
     "appium:automationName": "UIAutomator2",
-    "appium:ensureWebviewsHavePages": True,
-    "appium:nativeWebScreenshot": True,
-    "appium:newCommandTimeout": 3600,
-    "appium:connectHardwareKeyboard": True,
     "noReset": True,
     "fullReset": False
 })
