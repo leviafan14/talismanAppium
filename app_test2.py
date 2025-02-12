@@ -26,7 +26,9 @@ appium_server_url = 'http://localhost:4723'
 class TestAuth(unittest.TestCase):
 
     user_id_in_club_xpath = "io.pokerplatform.poks.poker:id/txtUserId"
-
+    id_sign_in_button = "io.pokerplatform.poks.poker:id/btnLogin"
+    id_user_name_field = "io.pokerplatform.poks.poker:id/txtEmail"
+    id_password_field = "io.pokerplatform.poks.poker:id/txtPassword"
     def setUp(self) -> None:
         self.driver = webdriver.Remote(appium_server_url,  options=options)
 
@@ -35,11 +37,11 @@ class TestAuth(unittest.TestCase):
             self.driver.quit()
 
 
-    # Авторизация по номеру телефона
+    # Авторизация в клубе
     def auth_in_club(self, username, password) -> None:
         # Объявление локаторов и тестовых данных
-        username_field = self.driver.find_element(By.ID, 'io.pokerplatform.poks.poker:id/txtEmail')
-        password_field = self.driver.find_element(By.ID, 'io.pokerplatform.poks.poker:id/txtPassword')
+        username_field = self.driver.find_element(By.ID, self.id_user_name_field)
+        password_field = self.driver.find_element(By.ID, self.id_password_field)
 
         # Клик по полю ввода номера телефона
         username_field.click()
@@ -47,8 +49,7 @@ class TestAuth(unittest.TestCase):
         password_field.send_keys(password)
 
         WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.ID, 'io.pokerplatform.poks.poker:id/btnLogin'))
-        ).click()
+            EC.element_to_be_clickable((By.ID, self.id_sign_in_button))).click()
 
 
     def test_auth_with_valid_data(self):
@@ -68,7 +69,9 @@ class TestAuth(unittest.TestCase):
     def test_auth_by_invalid_password(self):
         test_cases = [
             ("user017", "1234"),
-            ("invalid", "123")
+            ("invalid", "123"),
+            (" ", "123"),
+            ("user017", " ")
         ]
 
         xpath_error_text_username = '(//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/textinput_error"])[1]'
@@ -94,7 +97,22 @@ class TestAuth(unittest.TestCase):
                 )
 
                 # Проверка текста ошибки для пароля
-                self.assertEqual(error_text_password.text, "Wrong username or password")
+                self.assertEqual(error_text_password.text, expected_error_text)
+
+
+    def test_empty_auth_fields(self):
+        test_cases = [
+            ("", "123"),
+            ("user017", ""),
+            ("", "")
+        ]
+
+        for username, password in test_cases:
+            with self.subTest(username=username, password=password):
+                button_sign_in = WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located((By.ID, self.id_sign_in_button)))
+
+                self.assertFalse(button_sign_in.is_enabled())
 
 
 if __name__ == '__main__':
