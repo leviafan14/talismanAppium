@@ -1,8 +1,7 @@
-import time
 import unittest
+
 from appium import webdriver
 from appium.options.common.base import AppiumOptions
-from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -24,7 +23,9 @@ options.load_capabilities({
 
 appium_server_url = 'http://localhost:4723'
 
-class TestAppium(unittest.TestCase):
+class TestAuth(unittest.TestCase):
+
+    user_id_in_club_xpath = "io.pokerplatform.poks.poker:id/txtUserId"
 
     def setUp(self) -> None:
         self.driver = webdriver.Remote(appium_server_url,  options=options)
@@ -34,12 +35,8 @@ class TestAppium(unittest.TestCase):
             self.driver.quit()
 
 
-
     # Авторизация по номеру телефона
     def auth_in_club(self, username, password) -> None:
-
-        user_id_in_club_xpath = "io.pokerplatform.poks.poker:id/txtUserId"
-
         # Объявление локаторов и тестовых данных
         username_field = self.driver.find_element(By.ID, 'io.pokerplatform.poks.poker:id/txtEmail')
         password_field = self.driver.find_element(By.ID, 'io.pokerplatform.poks.poker:id/txtPassword')
@@ -53,21 +50,51 @@ class TestAppium(unittest.TestCase):
             EC.element_to_be_clickable((By.ID, 'io.pokerplatform.poks.poker:id/btnLogin'))
         ).click()
 
-        # Ожидание появление ID юзера внутри клуба
-        user_id_in_club = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.ID, user_id_in_club_xpath))
-        )
 
-        return user_id_in_club.text
-
-    def test_assert_user_id(self):
+    def test_auth_with_valid_data(self):
         username = "user05"
         password = "123"
         assert_user_id = "ID: 974104"
 
-        expected_user_id = self.auth_in_club(username, password)
+        self.auth_in_club(username, password)
 
-        assert expected_user_id == assert_user_id
+        # Ожидание появление ID юзера внутри клуба
+        expected_user_id = WebDriverWait(self.driver, 10).until(
+        EC.presence_of_element_located((By.ID, self.user_id_in_club_xpath)))
+
+        assert expected_user_id.text == assert_user_id
+
+
+    def test_auth_by_invalid_password(self):
+        test_cases = [
+            ("user017", "1234"),
+            ("invalid", "123")
+        ]
+
+        xpath_error_text_username = '(//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/textinput_error"])[1]'
+        xpath_error_text_password = '(//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/textinput_error"])[2]'
+        expected_error_text = "Wrong username or password"
+
+        for username, password in test_cases:
+            with self.subTest(username=username, password=password):
+
+                self.auth_in_club(username, password)
+
+                # Ожидание появления текста ошибки для имени пользователя
+                error_text_username = WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located((By.XPATH, xpath_error_text_username))
+                )
+
+                # Проверка текста ошибки для имени пользователя
+                self.assertEqual(error_text_username.text, expected_error_text)
+
+                # Ожидание появления текста ошибки для пароля
+                error_text_password = WebDriverWait(self.driver, 15).until(
+                    EC.presence_of_element_located((By.XPATH, xpath_error_text_password))
+                )
+
+                # Проверка текста ошибки для пароля
+                self.assertEqual(error_text_password.text, "Wrong username or password")
 
 
 if __name__ == '__main__':
