@@ -23,12 +23,14 @@ options.load_capabilities({
 
 appium_server_url = 'http://localhost:4723'
 
+
 class TestAuth(unittest.TestCase):
 
     user_id_in_club_xpath = "io.pokerplatform.poks.poker:id/txtUserId"
     id_sign_in_button = "io.pokerplatform.poks.poker:id/btnLogin"
     id_user_name_field = "io.pokerplatform.poks.poker:id/txtEmail"
     id_password_field = "io.pokerplatform.poks.poker:id/txtPassword"
+
     def setUp(self) -> None:
         self.driver = webdriver.Remote(appium_server_url,  options=options)
 
