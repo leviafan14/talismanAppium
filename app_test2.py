@@ -14,6 +14,7 @@ from config import *
 options = AppiumOptions()
 options.load_capabilities(capabilities)
 
+
 class TestApp(unittest.TestCase):
     # Авторизация в клубе
     def auth_in_club(self, username, password) -> None:
