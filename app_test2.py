@@ -8,51 +8,19 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from config import *
 
-# Задайте параметры для подключения к Appium
+# Параметры для подключения к Appium
 options = AppiumOptions()
-options.load_capabilities({
-    "platformName": "Android",
-    "deviceName": "emulator-5554",
-    "platformVersion": "11",
-    "app": "C:\\My_files\\POKS_DEV_V_1_6_4.apk",
-    "appPackage": "io.pokerplatform.poks.poker",
-    "appActivity": "io.pokerplatform.poks.poker.MainActivity",
-    "appium:automationName": "UIAutomator2",
-    "noReset": True,
-    "fullReset": False
-})
-
-appium_server_url = 'http://localhost:4723'
-
+options.load_capabilities(capabilities)
 
 class TestApp(unittest.TestCase):
-
-    user_id_in_club_xpath = "io.pokerplatform.poks.poker:id/txtUserId"
-    id_sign_in_button = "io.pokerplatform.poks.poker:id/btnLogin"
-    id_user_name_field = "io.pokerplatform.poks.poker:id/txtEmail"
-    id_password_field = "io.pokerplatform.poks.poker:id/txtPassword"
-    username = "user05"
-    password = "123"
-    # id стрелки для выбора клуба
-    arrow_id = "io.pokerplatform.poks.poker:id/arrow"
-    # xpath выбранного клуба
-    club_xpath = '//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/areaName" and @text="newt"]'
-    # ID кнопки вызова формы создания клуба
-    create_club_button_id = "io.pokerplatform.poks.poker:id/btnCreateClub"
-    # ID кнопки вызова формы подачи заявки на вступление в клуб
-    join_club_button_id = "io.pokerplatform.poks.poker:id/btnJoinClub"
-    # ID кнопки вызова формы выхода из клуба
-    leave_club_button_id = "io.pokerplatform.poks.poker:id/leaveClub"
-    # xpath выбора Global games
-    global_games_xpath = '//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/areaName" and @text="Global games"]'
-
     # Авторизация в клубе
     def auth_in_club(self, username, password) -> None:
 
         # Объявление локаторов
-        username_field = self.driver.find_element(By.ID, self.id_user_name_field)
-        password_field = self.driver.find_element(By.ID, self.id_password_field)
+        username_field = self.driver.find_element(By.ID, id_user_name_field)
+        password_field = self.driver.find_element(By.ID, id_password_field)
 
         # Клик по полю ввода логина или почты
         username_field.click()
@@ -60,11 +28,11 @@ class TestApp(unittest.TestCase):
         password_field.send_keys(password)
 
         WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.ID, self.id_sign_in_button))).click()
+            EC.element_to_be_clickable((By.ID, id_sign_in_button))).click()
 
     def setUp(self) -> None:
         self.driver = webdriver.Remote(appium_server_url,  options=options)
-        self.auth_in_club(self.username, self.password)
+        self.auth_in_club(username, password)
 
     def tearDown(self) -> None:
         if self.driver:
@@ -87,11 +55,11 @@ class TestApp(unittest.TestCase):
 
         assert_user_id = "ID: 974104"
 
-        self.auth_in_club(self.username, self.password)
+        self.auth_in_club(username, password)
 
         # Ожидание появление ID юзера внутри клуба
         expected_user_id = WebDriverWait(self.driver, 10).until(
-        EC.presence_of_element_located((By.ID, self.user_id_in_club_xpath)))
+        EC.presence_of_element_located((By.ID, user_id_in_club_xpath)))
 
         assert expected_user_id.text == assert_user_id
 
@@ -102,10 +70,6 @@ class TestApp(unittest.TestCase):
             (" ", "123"),
             ("user017", " ")
         ]
-
-        xpath_error_text_username = '(//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/textinput_error"])[1]'
-        xpath_error_text_password = '(//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/textinput_error"])[2]'
-        expected_error_text = "Wrong username or password"
 
         for username, password in test_cases:
             with self.subTest(username=username, password=password):
@@ -138,7 +102,7 @@ class TestApp(unittest.TestCase):
         for username, password in test_cases:
             with self.subTest(username=username, password=password):
                 button_sign_in = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.ID, self.id_sign_in_button)))
+                    EC.presence_of_element_located((By.ID, id_sign_in_button)))
 
                 self.assertFalse(button_sign_in.is_enabled())
 
@@ -146,7 +110,7 @@ class TestApp(unittest.TestCase):
     def click_on_arrow(self):
         # Нажатие на стрелку для раскрытия списка клубов
         WebDriverWait(self.driver, 5).until(
-        EC.presence_of_element_located((By.ID, self.arrow_id))).click()
+        EC.presence_of_element_located((By.ID, arrow_id))).click()
 
     # Функция нажатия на выбранный клуб в форме с списком клубов
     def select_club(self, club_xpath):
@@ -156,10 +120,7 @@ class TestApp(unittest.TestCase):
 
     # Тест изменения выбранного клуба
     def test_change_club(self):
-        # Селектор заголовка формы с списком клубов
-        change_club_menu_title_id = "io.pokerplatform.poks.poker:id/title"
-        # Селектор выбора клуба
-        expected_club_id = "io.pokerplatform.poks.poker:id/currentArea"
+
         # Ожидаемое название клуба
         expected_club_name = "newt"
 
@@ -167,23 +128,24 @@ class TestApp(unittest.TestCase):
         self.click_on_arrow()
 
         # Кнопка открытия формы создания клуба отображается
-        create_club_button = self.get_element_by_id(self.create_club_button_id, 2)
+        create_club_button = self.get_element_by_id(create_club_button_id, 2)
+        # Кнопка открытия формы создания клуба отображается
         self.assertTrue(create_club_button.is_displayed(), "Кнопка создания клуба отображается")
 
         # Выбор Global games отображается
-        global_games = self.get_element_by_xpath(self.global_games_xpath, 2)
+        global_games = self.get_element_by_xpath(global_games_xpath, 2)
         self.assertTrue(global_games.is_displayed(), "Global games не отображается в формы выбора клуба")
 
         # Кнопка открытия формы отравки зааявки на вступление в клуб отображается
-        join_club_button = self.get_element_by_id(self.join_club_button_id, 2)
+        join_club_button = self.get_element_by_id(join_club_button_id, 2)
         self.assertTrue(join_club_button.is_displayed(), "Кнопка открытия формы отравки зааявки на вступление в клуб не отображается")
 
         # Кнопка открытия формы выхода из клуба отображается
-        leave_club_button = self.get_element_by_id(self.leave_club_button_id, 2)
+        leave_club_button = self.get_element_by_id(leave_club_button_id, 2)
         self.assertTrue(leave_club_button.is_displayed(), "Кнопка открытия формы выхода из клуба не отображается")
 
         # Клик по выбранному клубу
-        self.select_club(self.club_xpath)
+        self.select_club(club_xpath)
 
         # Меню выбора клуба скрылось
         with self.assertRaises(NoSuchElementException):
@@ -193,14 +155,22 @@ class TestApp(unittest.TestCase):
         actual_club_name = WebDriverWait(self.driver, 15).until(
             EC.presence_of_element_located((By.ID, expected_club_id))).text
 
-        # Полученное название клуба соответствует ожидаемому
+        # Полученное название клуба соответствует ожидаемому из лобби клуба
         self.assertEqual(expected_club_name, actual_club_name)
 
         # Стрелка отображается
         arrow = WebDriverWait(self.driver, 5).until(
-            EC.presence_of_element_located((By.ID, self.arrow_id)))
+            EC.presence_of_element_located((By.ID, arrow_id)))
 
         self.assertTrue(arrow.is_displayed(),  f"Стрелка '{arrow}' не отображается на странице.")
+
+        # Кнопка лобби отображается
+        lobby_button = self.get_element_by_xpath(lobby_button_xpath, 5)
+        self.assertTrue(lobby_button.is_displayed())
+
+        # Кнопка лобби отображается
+        club_button = self.get_element_by_xpath(club_button_xpath, 5)
+        self.assertTrue(club_button.is_displayed())
 
 
 if __name__ == '__main__':
