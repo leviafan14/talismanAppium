@@ -130,7 +130,6 @@ class TestApp(unittest.TestCase):
 
         # Кнопка открытия формы создания клуба отображается
         create_club_button = self.get_element_by_id(create_club_button_id, 2)
-        # Кнопка открытия формы создания клуба отображается
         self.assertTrue(create_club_button.is_displayed(), "Кнопка создания клуба отображается")
 
         # Выбор Global games отображается
@@ -172,6 +171,54 @@ class TestApp(unittest.TestCase):
         # Кнопка лобби отображается
         club_button = self.get_element_by_xpath(club_button_xpath, 5)
         self.assertTrue(club_button.is_displayed())
+
+    def test_join_to_club(self):
+        # Клик по стрелке для вызова формы с списком клубов
+        self.click_on_arrow()
+
+        # Кнопка открытия формы отправки заявки в клуб отображается
+        join_club_button = self.get_element_by_id(join_club_button_id, 2)
+        self.assertTrue(join_club_button.is_displayed(), "Кнопка открытия формы отравки зааявки на вступление в клуб не отображается")
+
+        # Нажатие на кнопку вызова формы подачи заявки в клуб
+        join_club_button.click()
+
+        # Получение заголовка формы подачи заявки в клуб
+        title_form_join_to_club = self.get_element_by_id(id_title_join_to_club_form, 2)
+        self.assertEqual(title_form_join_to_club.text, expected_title_join_to_club_form)
+
+        # Получение поля для ввода Club ID
+        club_id_field = self.get_element_by_id(id_club_id_in_form_join_to_club, 2)
+        # Поле для ввода Club ID отображается
+        self.assertTrue(club_id_field.is_displayed(), "Поле Club ID не отображается")
+        self.assertEqual(club_id_field.text, expected_placeholder_club_id_join_to_club)
+
+        # Получение поля для ввода Agent ID
+        agent_id_field = self.get_element_by_id(id_agent_id_in_form_join_to_club, 2)
+        # Поле для ввода Agent ID отображается
+        self.assertTrue(agent_id_field.is_displayed(), "Поле Agent ID не отображается")
+        self.assertEqual(agent_id_field.text, expected_placeholder_agent_id_join_to_club)
+
+        # Получение кнопки для подачи заявки на вступление в клуб
+        join_to_club_btn = self.get_element_by_id(id_btn_join_to_club, 2)
+        # Кнопка подачи заявки на вступление в клуб отображается
+        self.assertTrue(join_to_club_btn.is_displayed())
+        # Текст на кнопке подаче заявки на вступление в клуб соответствует ожидаемому
+        self.assertEqual(join_to_club_btn.text, expected_join_btn_name)
+
+        # Получение кнопки создания клуба
+        create_club_club_btn = self.get_element_by_id(id_btn_create_club_in_form_joint_to_club, 2)
+
+        # Кнопка создания клуба отображается
+        self.assertTrue(create_club_club_btn.is_displayed())
+        # Текст на кнопке подаче заявки на вступление в клуб соответствует ожидаемому
+        self.assertEqual(create_club_club_btn.text, expected_create_club_btn_name)
+
+        # Получение кнопки закрытия экрана подачи заявки на вступление в клуб
+        close_btn = self.get_element_by_id(id_close_btn, 2)
+        # Кнопка закрытия экрана подачи заявки на вступление в клуб отображается и активна
+        self.assertTrue(close_btn.is_displayed())
+        self.assertTrue(close_btn.is_enabled())
 
 
 if __name__ == '__main__':

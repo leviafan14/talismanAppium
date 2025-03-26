@@ -43,3 +43,31 @@ expected_error_text = "Wrong username or password"
 change_club_menu_title_id = "io.pokerplatform.poks.poker:id/title"
 # Селектор выбора клуба
 expected_club_id = "io.pokerplatform.poks.poker:id/currentArea"
+
+# ID заголовка формы подачи заявки в клуб
+id_title_join_to_club_form = "io.pokerplatform.poks.poker:id/title"
+# Ожидаемое название формы подачи заявки в клуб
+expected_title_join_to_club_form = "Join Club"
+
+# ID поля для ввода Club ID в форме подачи заявки на вступление в клуб
+id_club_id_in_form_join_to_club = "io.pokerplatform.poks.poker:id/etClubId"
+# Ожидаемый плейсхолдер поля для ввода Club ID в форме подачи на вступление в клуб
+expected_placeholder_club_id_join_to_club = "Club ID"
+
+# ID поля для ввода Agent ID в форме подачи заявки на вступление в клуб
+id_agent_id_in_form_join_to_club  = "io.pokerplatform.poks.poker:id/inputAgentId"
+# Ожидаемый плейсхолдер поля для ввода Agent ID в форме подачи на вступление в клуб
+expected_placeholder_agent_id_join_to_club = "Agent ID (optional)"
+
+# ID кнопки подачи заявки в клуб
+id_btn_join_to_club = "io.pokerplatform.poks.poker:id/btnJoin"
+# Ожидаемое название кнопки подачи заявки в клуб
+expected_join_btn_name = "Join"
+
+# ID кнопки создания нового клуба в форме подачи заявки в клуб
+id_btn_create_club_in_form_joint_to_club = "io.pokerplatform.poks.poker:id/btnCreateClub"
+# Ожидаемое название кнопки создания клуба в форме подачи заявки в клуб
+expected_create_club_btn_name = "Create new club"
+
+# Id кнопки закрытия форм/экранов
+id_close_btn = "io.pokerplatform.poks.poker:id/btnClose"
