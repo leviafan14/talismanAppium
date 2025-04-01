@@ -69,5 +69,22 @@ id_btn_create_club_in_form_joint_to_club = "io.pokerplatform.poks.poker:id/btnCr
 # Ожидаемое название кнопки создания клуба в форме подачи заявки в клуб
 expected_create_club_btn_name = "Create new club"
 
-# Id кнопки закрытия форм/экранов
+# ID кнопки закрытия форм/экранов
 id_close_btn = "io.pokerplatform.poks.poker:id/btnClose"
+
+# ID кнопки вызова меню выбора типа создаваемого стола. Кнопка расположена в лобби клуба
+id_plus_button = "io.pokerplatform.poks.poker:id/plusButton"
+
+# xpath заголовка формы выбора типа создаваемого стола
+xpath_header_create_table = '//android.widget.TextView[@text="Create game"]'
+# xpath элемента в форме "Create game" открывающий форму создания MTT турнира
+xpath_create_mtt = '//android.widget.LinearLayout[@resource-id="io.pokerplatform.poks.poker:id/tableGameContainer"]/android.view.ViewGroup[3]'
+
+# ID поля для ввода названия турнира или стола в форме создания турнира / стола
+name_field_id = 'io.pokerplatform.poks.poker:id/etName'
+
+# ID кнопки создания стола / турнира
+id_btn_create_table = "io.pokerplatform.poks.poker:id/btnCreate"
+
+# ID клуба, лобби которого открыто в данный момент
+id_current_lobby = "io.pokerplatform.poks.poker:id/currentArea"

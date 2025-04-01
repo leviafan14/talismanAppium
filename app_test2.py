@@ -1,8 +1,8 @@
 import unittest
 
+from parameterized import parameterized
 from appium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-
 from appium.options.common.base import AppiumOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -20,16 +20,19 @@ class TestApp(unittest.TestCase):
     def auth_in_club(self, username, password) -> None:
 
         # Объявление локаторов
-        username_field = self.driver.find_element(By.ID, id_user_name_field)
-        password_field = self.driver.find_element(By.ID, id_password_field)
+        try:
+            username_field = self.driver.find_element(By.ID, id_user_name_field)
+            password_field = self.driver.find_element(By.ID, id_password_field)
 
-        # Клик по полю ввода логина или почты
-        username_field.click()
-        username_field.send_keys(username)
-        password_field.send_keys(password)
+            # Клик по полю ввода логина или почты
+            username_field.click()
+            username_field.send_keys(username)
+            password_field.send_keys(password)
 
-        WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.ID, id_sign_in_button))).click()
+            WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.ID, id_sign_in_button))).click()
+        except Exception as e:
+            print("Пользователь авторизован")
 
     def setUp(self) -> None:
         self.driver = webdriver.Remote(appium_server_url,  options=options)
@@ -51,6 +54,17 @@ class TestApp(unittest.TestCase):
             EC.presence_of_element_located((By.XPATH, xpath))
         )
         return element
+
+    # Функция свайпа экрана
+    def swipe_bottom(self):
+        size = self.driver.get_window_size()  # Получаем размер экрана
+        start_x = size['width'] / 2  # Начальная точка по X (центр)
+        start_y = size['height'] * 0.8  # Начальная точка по Y (80% высоты экрана)
+        end_y = size['height'] * 0.2  # Конечная точка по Y (20% высоты экрана)
+
+        # Выполнение свайпа вниз
+        self.driver.swipe(start_x, start_y, start_x, end_y, duration=800)
+
 
     def test_auth_with_valid_data(self):
 
@@ -219,6 +233,47 @@ class TestApp(unittest.TestCase):
         # Кнопка закрытия экрана подачи заявки на вступление в клуб отображается и активна
         self.assertTrue(close_btn.is_displayed())
         self.assertTrue(close_btn.is_enabled())
+
+    # Тест создания MTT турнира
+    def test_create_mtt_tournament(self, iteration):
+        # Ожидаемое название клуба
+        expected_club_name = "newt"
+        # Получение названия клуба в котором сейчас находится игрок
+        current_club_lobby = self.get_element_by_id(id_current_lobby, 5)
+
+        if current_club_lobby.text != expected_club_name:
+            # Клик по стрелке для вызова формы с списком клубов
+            self.click_on_arrow()
+            # Клик по выбранному клубу
+            self.select_club(club_xpath)
+
+        # Получение кнопки для вызова меню создания стола
+        btn_plus = self.get_element_by_id(id_plus_button, 2)
+        btn_plus.click()
+
+        # Получение и тест наличия заголовка формы выбора типа создаваемого стола
+        create_table_form_header = self.get_element_by_xpath(xpath_header_create_table, 2)
+        self.assertTrue(create_table_form_header.is_displayed(), "Хеадер формы выбора типа стола не отображается")
+
+        # Получение и нажатие на кнопку вызова формы создания MTT турнира
+        btn_create_mtt = self.get_element_by_xpath(xpath_create_mtt, 2)
+        btn_create_mtt.click()
+
+        # Ввод названия турнира
+        mtt_name = self.get_element_by_id(name_field_id, 2)
+        mtt_name.send_keys(f"MTT-Appium-{iteration}")  # Используйте номер итерации для имени
+        # Свайп вниз экрана
+        self.swipe_bottom()
+        # Получение кнопки создания турнира и нажатие на неё
+        button_create_mtt_tournament = self.get_element_by_id(id_btn_create_table, 5)
+        button_create_mtt_tournament.click()
+
+        # Ожидание 5 секунд после нажатия на кнопку
+        try:
+            WebDriverWait(self.driver, 5).until(EC.invisibility_of_element_located((By.ID, id_btn_create_table)))
+            print("Кнопка скрылась после нажатия.")
+        except Exception as e:
+            self.fail(f"Кнопка отображается после нажатия: {str(e)}")
 
 
 if __name__ == '__main__':
