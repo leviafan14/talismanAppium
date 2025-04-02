@@ -171,9 +171,9 @@ def test_create_mtt_tournament(driver, login, iteration):
     button_create_mtt_tournament = get_element_by_id(driver, id_btn_create_table, 5)
     button_create_mtt_tournament.click()
 
-    # Ожидание 5 секунд после нажатия на кнопку
+    # Ожидание исчезновения кнопки после нажатия на неё
     try:
-        WebDriverWait(driver, 10).until(EC.invisibility_of_element_located((By.ID, id_btn_create_table)))
+        WebDriverWait(driver, 9).until(EC.invisibility_of_element_located((By.ID, id_btn_create_table)))
         print("Кнопка скрылась после нажатия.")
     except Exception as e:
         pytest.fail(f"Кнопка отображается после нажатия: {str(e)}")
