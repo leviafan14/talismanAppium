@@ -88,3 +88,8 @@ id_btn_create_table = "io.pokerplatform.poks.poker:id/btnCreate"
 
 # ID клуба, лобби которого открыто в данный момент
 id_current_lobby = "io.pokerplatform.poks.poker:id/currentArea"
+
+# xpath формы уведомляющей о том что турнир / стол создан
+xpath_success_create = '//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/txtTitle"]'
+# xpath кнопки закрывающей окно уведомляющее об успешном создании стола / турнира
+xpath_close_btn_success_create_form = '//android.widget.ImageView[@resource-id="io.pokerplatform.poks.poker:id/btnClose"]'
