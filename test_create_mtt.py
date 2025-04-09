@@ -14,15 +14,15 @@ options.load_capabilities(capabilities)
 
 
 @pytest.fixture(scope="module")
+# Инициализация драйвера
 def driver():
-    # Инициализация драйвера
     driver = webdriver.Remote(appium_server_url, options=options)
     yield driver
     driver.quit()
 
 
 @pytest.fixture(scope="module")
-def login(driver):
+def login(driver: object) -> None:
     # Авторизация в клубе
     try:
         username_field = WebDriverWait(driver, 10).until(
@@ -42,33 +42,33 @@ def login(driver):
         print("Пользователь авторизован")
 
 
-def get_element_by_id(driver, element_id, timeout):
+def get_element_by_id(driver: object, element_id: str, timeout: int) -> object:
     return WebDriverWait(driver, timeout).until(
         EC.presence_of_element_located((By.ID, element_id))
     )
 
 
-def get_element_by_xpath(driver, xpath, timeout):
+def get_element_by_xpath(driver: object, xpath: str, timeout: int) -> object:
     return WebDriverWait(driver, timeout).until(
         EC.presence_of_element_located((By.XPATH, xpath))
     )
 
 
 # Функция вызова формы с списком клубов
-def click_on_arrow(driver):
+def click_on_arrow(driver: object) -> None:
     # Нажатие на стрелку для раскрытия списка клубов
     WebDriverWait(driver, 5).until(
         EC.presence_of_element_located((By.ID, arrow_id))).click()
 
 
 # Функция нажатия на выбранный клуб в форме с списком клубов
-def select_club(driver, club_xpath):
+def select_club(driver: object, club_xpath: str) -> None:
     # Нажатие на выбранный клуб
     WebDriverWait(driver, 3).until(
         EC.presence_of_element_located((By.XPATH, club_xpath))).click()
 
 
-def swipe_bottom(driver):
+def swipe_bottom(driver: object) -> None:
     size = driver.get_window_size()
     start_x = size['width'] / 2
     start_y = size['height'] * 0.8
@@ -76,7 +76,7 @@ def swipe_bottom(driver):
     driver.swipe(start_x, start_y, start_x, end_y, duration=800)
 
 
-def test_auth_with_valid_data(driver, login):
+def test_auth_with_valid_data(driver: object, login: str) -> None:
     assert_user_id = "ID: 974104"
     expected_user_id = get_element_by_id(driver, user_id_in_club_xpath, 10)
     assert expected_user_id.text == assert_user_id
@@ -88,7 +88,7 @@ def test_auth_with_valid_data(driver, login):
     (" ", "123"),
     ("user017", " ")
 ])
-def test_auth_by_invalid_password(driver, username, password):
+def test_auth_by_invalid_password(driver: object, username: str, password: str) -> None:
     # Авторизация с неверными данными
     username_field = get_element_by_id(driver, id_user_name_field, 10)
     password_field = driver.find_element(By.ID, id_password_field)
@@ -114,7 +114,7 @@ def test_auth_by_invalid_password(driver, username, password):
     ("user017", ""),
     ("", "")
 ])
-def test_empty_auth_fields(driver, username, password):
+def test_empty_auth_fields(driver: object, username: str, password: str) -> None:
     # Инициализация полей авторизации
     username_field = get_element_by_id(driver, id_user_name_field, 10)
     password_field = driver.find_element(By.ID, id_password_field)
@@ -126,7 +126,7 @@ def test_empty_auth_fields(driver, username, password):
 
 
 @pytest.mark.parametrize("iteration", [1, 2, 3, 4, 5])  # Параметризация для 5 итераций
-def test_create_mtt_tournament(driver, login, iteration):
+def test_create_mtt_tournament(driver: object, login: str, iteration: int) -> None:
     # Ожидаемое название клуба
     expected_club_name = "newt"
 

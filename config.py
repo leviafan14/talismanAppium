@@ -34,7 +34,6 @@ global_games_xpath = '//android.widget.TextView[@resource-id="io.pokerplatform.p
 lobby_button_xpath = '//android.widget.TextView[@text="Lobby"]'
 # xpath кнопки Club в лобби клуба
 club_button_xpath = '//android.widget.TextView[@text="Club"]'
-
 xpath_error_text_username = '(//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/textinput_error"])[1]'
 xpath_error_text_password = '(//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/textinput_error"])[2]'
 expected_error_text = "Wrong username or password"
@@ -43,7 +42,8 @@ expected_error_text = "Wrong username or password"
 change_club_menu_title_id = "io.pokerplatform.poks.poker:id/title"
 # Селектор выбора клуба
 expected_club_id = "io.pokerplatform.poks.poker:id/currentArea"
-
+# Заголовок формы с выбором клуба
+choose_club_form_txt = "Choose club"
 # ID заголовка формы подачи заявки в клуб
 id_title_join_to_club_form = "io.pokerplatform.poks.poker:id/title"
 # Ожидаемое название формы подачи заявки в клуб
@@ -93,3 +93,11 @@ id_current_lobby = "io.pokerplatform.poks.poker:id/currentArea"
 xpath_success_create = '//android.widget.TextView[@resource-id="io.pokerplatform.poks.poker:id/txtTitle"]'
 # xpath кнопки закрывающей окно уведомляющее об успешном создании стола / турнира
 xpath_close_btn_success_create_form = '//android.widget.ImageView[@resource-id="io.pokerplatform.poks.poker:id/btnClose"]'
+
+# Кнопки и экраны связанные с функционалом выхода из клуба
+# ID кнопки выхода из клуба или вызова формы с списком клубов для выбора клуба из которого нужно выйти
+leave_club_btn_id = "io.pokerplatform.poks.poker:id/leaveClub"
+leave_club_btn_txt = "Leave the club"
+# Текст под заголовком формы с списком клубов в которых состоит игрок и из которых можно выйти
+header_leave_club_form = "io.pokerplatform.poks.poker:id/select_club"
+header_txt = "Select a club"
